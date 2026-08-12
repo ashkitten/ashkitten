@@ -1,4 +1,13 @@
-```python
-for emoji in sorted([emoji for category, emojis in self.emojidata.items() for name, emoji in emojis.items() if self.searchbox.get_text().lower() in emoji.get("name").lower() or self.searchbox.get_text().lower() in " ".join(emoji.get("keywords"))], key=lambda emoji: (1 - Levenshtein.ratio(self.searchbox.get_text(), emoji.get("name"))) + (1 - Levenshtein.setratio([self.searchbox.get_text()], emoji.get("keywords")))):
-  self.search_results.add_emoji(emoji)
+```java
+// Preload all classes in ClassGraph to avoid invoking the classloader, which would cause a deadlock under Kilt
+ClassLoader cl = Thread.currentThread().getContextClassLoader();
+ZipInputStream zip = new ZipInputStream(Objects.requireNonNull(MixinGenericsCoreMod.class.getResourceAsStream("/META-INF/jarjar/classgraph-4.8.189.jar")));
+for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+    if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+        String className = entry.getName().replace(".class", "").replace('/', '.');
+        try {
+            cl.loadClass(className);
+        } catch (ClassNotFoundException | NoClassDefFoundError ignored) {}
+    }
+}
 ```
